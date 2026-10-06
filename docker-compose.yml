@@ -12,7 +12,9 @@ services:
 
   # https://hub.docker.com/r/kasmweb/discord
   discord:
-    image: kasmweb/discord:1.19.0
+    # Keep this on the last verified image until a newer Kasm/Discord image
+    # passes the renderer and RPC health checks below.
+    image: kasmweb/discord:1.18.0@sha256:1c3e34a38f34aec62ca09c2ccee4e4269236bc30b14be569d75680eada5d3c0a
     container_name: discord
     restart: unless-stopped
     ports:
@@ -23,11 +25,15 @@ services:
     shm_size: 512m
     # check if the discord desktop app is running
     healthcheck:
-      test: ["CMD", "curl", "127.0.0.1:6463"]
+      test:
+        - CMD-SHELL
+        - >-
+          pgrep -f -- '--type=renderer' >/dev/null &&
+          curl --silent --output /dev/null --max-time 2 127.0.0.1:6463
       interval: 5s
       timeout: 2s
       retries: 6
-      start_period: 10s
+      start_period: 45s
     volumes:
       - tmp:/tmp
       - kasm-user:/home/kasm-user
