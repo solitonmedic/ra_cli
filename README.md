@@ -39,5 +39,9 @@ A Compose file example is available [here](docker-compose.yml).  The example inc
 Discord client provided by [kasmweb](https://hub.docker.com/r/kasmweb/discord) which will allow you
 to run a headless stack on a server without requiring a traditional desktop Discord client.
 
+The Discord image is pinned to a verified Kasm image digest. When updating it, verify that the
+Discord renderer starts and the local RPC endpoint responds before changing the pinned image in
+`docker-compose.yml`.
+
 With this, you can play games on a Steam Deck or other handheld emulation device and your Discord
 status will stay updated without requiring a Discord client running on that device.
